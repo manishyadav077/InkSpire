@@ -12,7 +12,7 @@ const Dashboard = () => {
   const [tab, setTab] = useState("");
 
   useEffect(() => {
-    const urlParams = new urlParams.get(location.search);
+    const urlParams = new URLSearchParams(location.search);
     const tabFromUrl = urlParams.get("tab");
     if (tabFromUrl) {
       setTab(tabFromUrl);
