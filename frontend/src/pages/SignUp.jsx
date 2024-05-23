@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
+import OAuth from "../components/OAuth";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({});
@@ -25,7 +26,6 @@ const SignUp = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      
 
       const data = await res.json();
       if (data.success === false) {
@@ -59,15 +59,6 @@ const SignUp = () => {
 
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            {/* <div>
-              <Label value="name" />
-              <TextInput
-                type="text"
-                placeholder="name"
-                id="name"
-                onChange={handleChange}
-              />
-            </div> */}
             <div>
               <Label value="username" />
               <TextInput
@@ -110,6 +101,7 @@ const SignUp = () => {
                 "Sign Up"
               )}
             </Button>
+            <OAuth />
           </form>
 
           <div className="flex gap-2 text-sm mt-5">
