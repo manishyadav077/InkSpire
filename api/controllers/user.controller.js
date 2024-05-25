@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import { errorHandler } from "../utils/error.js";
 
 export const signout = (req, res, next) => {
   try {

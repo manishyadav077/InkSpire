@@ -1,4 +1,4 @@
-import { Alert, Button, Modal, ModalBody, TextInput } from "flowbite-react";
+import { Alert, Button, Modal, TextInput } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -34,8 +34,10 @@ export default function DashProfile() {
   const [updateUserError, setUpdateUserError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
+
   const filePickerRef = useRef();
   const dispatch = useDispatch();
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -50,16 +52,6 @@ export default function DashProfile() {
   }, [imageFile]);
 
   const uploadImage = async () => {
-    // service firebase.storage {
-    //   match /b/{bucket}/o {
-    //     match /{allPaths=**} {
-    //       allow read;
-    //       allow write: if
-    //       request.resource.size < 2 * 1024 * 1024 &&
-    //       request.resource.contentType.matches('image/.*')
-    //     }
-    //   }
-    // }
     setImageFileUploading(true);
     setImageFileUploadError(null);
     const storage = getStorage(app);
@@ -76,7 +68,7 @@ export default function DashProfile() {
       },
       (error) => {
         setImageFileUploadError(
-          "Could not upload image (File must be less than 2MB)"
+          "Could not upload image (File must be less than 5MB)"
         );
         setImageFileUploadProgress(null);
         setImageFile(null);
@@ -112,12 +104,14 @@ export default function DashProfile() {
     try {
       dispatch(updateStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
           "Content-Type": "application/json",
+          
         },
         body: JSON.stringify(formData),
       });
+      
       const data = await res.json();
       if (!res.ok) {
         dispatch(updateFailure(data.message));
