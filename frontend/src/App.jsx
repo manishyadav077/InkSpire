@@ -1,18 +1,21 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { About, Dashboard, Home, SignIn, SignUp } from "./pages";
-import Header from "./components/Header";
-import FooterCom from "./components/Footer";
-import ScrollToTop from "./components/ScrollToTop";
-import CreatePost from "./pages/CreatePost";
-import PostPage from "./pages/PostPage";
-import UpdatePost from "./pages/UpdatePost";
-import Search from "./pages/Search";
-import { useSelector } from "react-redux";
-import RootLayout from "./pages/RootLayout";
-import AuthLayout from "./pages/AuthLayout";
+import {
+  About,
+  AuthLayout,
+  CreatePost,
+  Dashboard,
+  Home,
+  PostPage,
+  RootLayout,
+  Search,
+  SignIn,
+  SignUp,
+  UpdatePost,
+} from "./pages";
+import { FooterCom, Header, ScrollToTop } from "./components";
+
 
 const App = () => {
-  const status = useSelector((state) => state.user.currentUser);
   return (
     <BrowserRouter>
       <ScrollToTop />
