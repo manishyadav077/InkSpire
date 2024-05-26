@@ -130,6 +130,10 @@ const Header = () => {
         <Navbar.Link active={path === "/project"} as={"div"}>
           <Link to="/project">Projects</Link>
         </Navbar.Link>
+
+        <Navbar.Link active={path === "/create-post"} as={"div"}>
+          <Link to="/create-post">Create Post</Link>
+        </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
   );
