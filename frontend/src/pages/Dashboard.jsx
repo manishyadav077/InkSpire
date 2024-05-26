@@ -4,6 +4,7 @@ import {
   DashComments,
   DashPosts,
   DashProfile,
+  DashSidebar,
   DashUsers,
   DashboardComp,
 } from "../components";
