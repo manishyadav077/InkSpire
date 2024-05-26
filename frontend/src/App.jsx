@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { About, Dashboard, Home, Project, SignIn, SignUp } from "./pages";
+import { About, Dashboard, Home, SignIn, SignUp } from "./pages";
 import Header from "./components/Header";
 import FooterCom from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
@@ -26,9 +26,8 @@ const App = () => {
         <Route element={<RootLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/project" element={<Project />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/post/:postslug" element={<PostPage />} />
+          <Route path="/post/:postSlug" element={<PostPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/create-post" element={<CreatePost />} />
           <Route path="/update-post/:postId" element={<UpdatePost />} />

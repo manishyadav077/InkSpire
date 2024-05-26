@@ -88,11 +88,7 @@ const Header = () => {
             arrowIcon={false}
             inline
             label={
-              <Avatar
-                alt="user"
-                img={currentUser.profilePicture}
-                rounded
-              />
+              <Avatar alt="user" img={currentUser.profilePicture} rounded />
             }
           >
             <Dropdown.Header>
@@ -125,10 +121,6 @@ const Header = () => {
 
         <Navbar.Link active={path === "/about"} as={"div"}>
           <Link to="/about">About</Link>
-        </Navbar.Link>
-
-        <Navbar.Link active={path === "/project"} as={"div"}>
-          <Link to="/project">Projects</Link>
         </Navbar.Link>
 
         <Navbar.Link active={path === "/create-post"} as={"div"}>

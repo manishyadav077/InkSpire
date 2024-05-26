@@ -1,7 +1,6 @@
 import { Button, Spinner } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import CallToAction from "../components/CallToAction";
 import CommentSection from "../components/CommentSection";
 import PostCard from "../components/PostCard";
 
@@ -16,8 +15,14 @@ export default function PostPage() {
     const fetchPost = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/post/getposts?slug=${postSlug}`);
+        const url = `/api/post/getposts?slug=${postSlug}`;
+        console.log("Fetching URL:", url);
+        const res = await fetch(url);
         const data = await res.json();
+
+        console.log("Response:", res);
+        console.log("Data:", data);
+
         if (!res.ok) {
           setError(true);
           setLoading(false);
@@ -40,7 +45,9 @@ export default function PostPage() {
     try {
       const fetchRecentPosts = async () => {
         const res = await fetch(`/api/post/getposts?limit=3`);
+
         const data = await res.json();
+
         if (res.ok) {
           setRecentPosts(data.posts);
         }
@@ -85,9 +92,7 @@ export default function PostPage() {
         className="p-3 max-w-2xl mx-auto w-full post-content"
         dangerouslySetInnerHTML={{ __html: post && post.content }}
       ></div>
-      <div className="max-w-4xl mx-auto w-full">
-        <CallToAction />
-      </div>
+
       {post && <CommentSection postId={post._id} />}
 
       <div className="flex flex-col justify-center items-center mb-5">
