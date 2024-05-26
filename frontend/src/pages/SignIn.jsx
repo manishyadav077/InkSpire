@@ -31,8 +31,10 @@ const SignIn = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
+      console.log(res)
 
       const data = await res.json();
+      console.log(data)
       if (data.success === false) {
         dispatch(signInFaliure(data.message));
       }

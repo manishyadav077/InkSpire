@@ -23,11 +23,25 @@ export const signup = async (req, res, next) => {
     username,
     email,
     password: hashedPassword,
+    isAdmin: true,
   });
 
   try {
     await newUser.save();
-    res.json("signup successful");
+
+    const token = jwt.sign(
+      { id: newUser._id, isAdmin: newUser.isAdmin },
+      process.env.JWT_SECRET
+    );
+
+    const { password: pass, ...rest } = newUser._doc;
+
+    res
+      .status(201)
+      .cookie("access_token", token, {
+        httpOnly: true,
+      })
+      .json({ ...rest, isAdmin: true });
   } catch (error) {
     next(error);
   }
