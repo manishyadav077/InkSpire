@@ -31,7 +31,7 @@ export const signup = async (req, res, next) => {
 
     const token = jwt.sign(
       { id: newUser._id, isAdmin: newUser.isAdmin },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET || "hero1100"
     );
 
     const { password: pass, ...rest } = newUser._doc;

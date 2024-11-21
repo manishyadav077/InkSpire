@@ -10,8 +10,11 @@ import path from "path";
 
 dotenv.config();
 
+const mongodbURI = "mongodb+srv://manish:react%4019@inkspire.aphml4u.mongodb.net/?retryWrites=true&w=majority&appName=inkspire";
+
 mongoose
-  .connect(process.env.MONGODB_URL)
+  .connect(mongodbURI)
+  
   .then(() => {
     console.log("Database is connected");
   })

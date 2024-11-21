@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "flowbite-react";
 import { AiFillGoogleCircle } from "react-icons/ai";
-import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
+import { GoogleAuthProvider, signInWithRedirect, getAuth } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { app } from "../firebase";
 import { signInSuccess } from "../redux/user/userSlice";
@@ -16,7 +16,7 @@ const OAuth = () => {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: "select_account" });
     try {
-      const resultFromGoogle = await signInWithPopup(auth, provider);
+      const resultFromGoogle = await signInWithRedirect(auth, provider);
       const res = await fetch("/api/auth/google", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
