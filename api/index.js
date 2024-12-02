@@ -11,11 +11,9 @@ import cors from "cors";
 
 dotenv.config();
 
-
-
 mongoose
   .connect(process.env.MONGODB_URL)
-  
+
   .then(() => {
     console.log("Database is connected");
   })
@@ -26,6 +24,18 @@ mongoose
 const __dirname = path.resolve();
 
 const app = express();
+
+// Middleware to set COOP header
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+  next();
+});
+
+// Middleware to set COEP header
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+  next();
+});
 
 app.use(
   cors({
