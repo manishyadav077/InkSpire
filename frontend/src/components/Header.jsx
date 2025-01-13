@@ -54,10 +54,10 @@ const Header = () => {
         to="/"
         className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white"
       >
-        <span className="px-2 py-1 bg-gradient-to-r from-[#b92b27] to-[#1565C0] rounded-lg text-white">
-          ink
+        <span className="px-2 py-1 rounded-lg">
+          inkSpire
         </span>
-        Spire
+        
       </Link>
 
       <form onSubmit={handleSubmit}>
