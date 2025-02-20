@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   signInFaliure,
@@ -31,7 +31,6 @@ const SignIn = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      console.log(res);
 
       const data = await res.json();
       console.log(data);
@@ -48,22 +47,35 @@ const SignIn = () => {
     }
   };
 
+  const titleText = "Write. Inspire. Revolutionize.";
+  const [displayedTitle, setDisplayedTitle] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (currentIndex < titleText.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedTitle((prev) => prev + titleText[currentIndex]);
+        setCurrentIndex((prev) => prev + 1);
+      }, 100);
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex]);
+
   return (
     <div className="min-h-screen mt-12">
-      <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-12">
+      <div className="flex p-3 w-full mx-auto flex-col justify-between md:flex-row md:items-center gap-12">
         <div className="flex-1">
           <Link to="/" className="font-bold dark:text-white text-4xl">
             <span className="px-2 py-1 bg-gradient-to-r rounded-lg">
-              inkSpire
+              {displayedTitle}
             </span>
           </Link>
-          <p className="text-sm mt-5">
-            Welcome to inkSpire!! sign in with your email and password or google
-            to explore more
-          </p>
         </div>
-
-        <div className="flex-1">
+        <div className="border-white border-[1px] h-[19rem] mr-5"></div>
+        <div className="flex-1 md:max-w-md mr-[120px]">
+          <h1 className="font-bold text-xl text-center">
+            Welcome back to inkSpire!!
+          </h1>
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>
               <Label value="email" />
@@ -102,7 +114,7 @@ const SignIn = () => {
             {/* <OAuth /> */}
           </form>
 
-          <div className="flex gap-2 text-sm mt-5">
+          <div className="flex justify-center gap-2 text-sm mt-5">
             <span>Don't have an account?</span>
             <Link to="/sign-up" className="text-blue-500">
               Sign Up

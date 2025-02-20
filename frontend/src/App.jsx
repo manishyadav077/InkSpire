@@ -14,20 +14,19 @@ import {
 } from "./pages";
 import { FooterCom, Header, ScrollToTop } from "./components";
 
-
 const App = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
       <Header />
+
       <Routes>
-        <Route element={<AuthLayout />}>
+        {/* <Route element={<AuthLayout />}> */}
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
-        </Route>
-
+        {/* </Route> */}
+        <Route path="/" element={<Home />} />
         <Route element={<RootLayout />}>
-          <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/search" element={<Search />} />
           <Route path="/post/:postSlug" element={<PostPage />} />
