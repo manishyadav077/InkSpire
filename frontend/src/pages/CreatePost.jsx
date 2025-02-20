@@ -1,11 +1,8 @@
 import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
-import Quill from "quill";
 import "quill-emoji/dist/quill-emoji.css";
 import "quill-emoji/dist/quill-emoji.js";
-import { EmojiBlot, ShortNameEmoji, ToolbarEmoji } from "quill-emoji";
 import {
   getDownloadURL,
   getStorage,
@@ -43,7 +40,7 @@ export default function CreatePost() {
 
   const modules = {
     toolbar: [
-      [{ emoji: [] }], // Adds emoji button to toolbar
+      [{ emoji: [] }],
       [{ header: [1, 2, false] }],
       ["bold", "italic", "underline"],
       [{ list: "ordered" }, { list: "bullet" }],
