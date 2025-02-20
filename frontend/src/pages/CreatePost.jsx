@@ -1,6 +1,11 @@
 import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+
+import Quill from "quill";
+import "quill-emoji/dist/quill-emoji.css";
+import "quill-emoji/dist/quill-emoji.js";
+import { EmojiBlot, ShortNameEmoji, ToolbarEmoji } from "quill-emoji";
 import {
   getDownloadURL,
   getStorage,
@@ -8,7 +13,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +26,33 @@ export default function CreatePost() {
   const [publishError, setPublishError] = useState(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function loadQuillModules() {
+      try {
+        const Quill = (await import("quill")).default;
+        const { ShortNameEmoji } = await import("quill-emoji");
+        Quill.register("modules/emoji", ShortNameEmoji);
+      } catch (error) {
+        console.error("Failed to load Quill modules:", error);
+      }
+    }
+
+    loadQuillModules();
+  }, []);
+
+  const modules = {
+    toolbar: [
+      [{ emoji: [] }], // Adds emoji button to toolbar
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["clean"],
+    ],
+    "emoji-toolbar": true,
+    "emoji-textarea": true,
+    "emoji-shortname": true,
+  };
 
   const handleUpdloadImage = async () => {
     try {
@@ -147,6 +179,7 @@ export default function CreatePost() {
           placeholder="Write something..."
           className="h-72 mb-12"
           required
+          modules={modules}
           onChange={(value) => {
             setFormData({ ...formData, content: value });
           }}
