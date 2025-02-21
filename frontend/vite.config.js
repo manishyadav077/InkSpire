@@ -3,12 +3,15 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   optimizeDeps: {
-    include: ["quill", "quill-emoji"],
+    exclude: ["quill", "quill-emoji"],
   },
   server: {
     proxy: { "/api": { target: "http://localhost:3000", secure: false } },
   },
   build: {
+    commonjsOptions: {
+      include: [/quill/, /node_modules/],
+    },
     chunkSizeWarningLimit: 800,
     rollupOptions: {
       output: {
