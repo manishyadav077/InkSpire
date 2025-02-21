@@ -12,7 +12,12 @@ import cors from "cors";
 dotenv.config();
 
 mongoose
-  .connect(process.env.MONGODB_URL)
+.connect(process.env.MONGODB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 30000,
+  socketTimeoutMS: 45000,
+})
 
   .then(() => {
     console.log("Database is connected");
@@ -39,8 +44,8 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: "https://inkspire-eps3.onrender.com", // Replace with your frontend domain
-    credentials: true, // Allow cookies
+    origin: "https://inkspire-eps3.onrender.com",
+    credentials: true,
   })
 );
 
