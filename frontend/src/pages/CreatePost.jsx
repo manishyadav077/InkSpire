@@ -1,6 +1,6 @@
 import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
+import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import "quill-emoji/dist/quill-emoji.css";
 import {
   getDownloadURL,
   getStorage,
@@ -8,12 +8,10 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
-import { lazy, useEffect, useState } from "react";
+import { useState } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useNavigate } from "react-router-dom";
-
-const ReactQuill = lazy(() => import("react-quill"));
 
 export default function CreatePost() {
   const [file, setFile] = useState(null);
@@ -21,38 +19,8 @@ export default function CreatePost() {
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
-  const [quillReady, setQuillReady] = useState(false);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    async function loadQuillModules() {
-      try {
-        const Quill = (await import("quill")).default;
-        window.Quill = Quill;
-        const { ShortNameEmoji } = await import("quill-emoji");
-        Quill.register("modules/emoji", ShortNameEmoji);
-        setQuillReady(true);
-      } catch (error) {
-        console.error("Failed to load Quill modules:", error);
-      }
-    }
-
-    loadQuillModules();
-  }, []);
-
-  const modules = {
-    toolbar: [
-      [{ emoji: [] }],
-      [{ header: [1, 2, false] }],
-      ["bold", "italic", "underline"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["clean"],
-    ],
-    "emoji-toolbar": true,
-    "emoji-textarea": true,
-    "emoji-shortname": true,
-  };
 
   const handleUpdloadImage = async () => {
     try {
@@ -174,22 +142,15 @@ export default function CreatePost() {
             className="w-full h-72 object-cover"
           />
         )}
-        {quillReady ? (
-          <Suspense fallback={<div>Loading editor...</div>}>
-            <ReactQuill
-              theme="snow"
-              placeholder="Write something..."
-              className="h-72 mb-12"
-              required
-              modules={modules}
-              onChange={(value) => {
-                setFormData({ ...formData, content: value });
-              }}
-            />
-          </Suspense>
-        ) : (
-          <div>Loading editor...</div>
-        )}
+        <ReactQuill
+          theme="snow"
+          placeholder="Write something..."
+          className="h-72 mb-12"
+          required
+          onChange={(value) => {
+            setFormData({ ...formData, content: value });
+          }}
+        />
         <Button type="submit" gradientDuoTone="purpleToPink">
           Publish
         </Button>
