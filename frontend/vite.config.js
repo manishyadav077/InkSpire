@@ -7,19 +7,18 @@ export default defineConfig({
   },
   build: {
     commonjsOptions: {
-      transformMixedEsModules: true, // Ensure compatibility with Quill (ESM + CJS)
+      transformMixedEsModules: true,
     },
     chunkSizeWarningLimit: 800,
     rollupOptions: {
-      external: ["react"], // Prevent React from being bundled inside Quill
       output: {
         globals: {
           react: "React",
         },
         manualChunks(id) {
           if (id.includes("node_modules")) {
-            if (id.includes("firebase")) return "firebase"; // Keep Firebase separate
-            return "vendor"; // General vendor chunk
+            if (id.includes("firebase")) return "firebase";
+            return "vendor";
           }
         },
       },
