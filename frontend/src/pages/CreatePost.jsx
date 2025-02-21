@@ -2,7 +2,6 @@ import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "quill-emoji/dist/quill-emoji.css";
-import "quill-emoji/dist/quill-emoji.js";
 import {
   getDownloadURL,
   getStorage,
