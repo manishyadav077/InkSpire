@@ -1,5 +1,4 @@
 import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "quill-emoji/dist/quill-emoji.css";
 import {
@@ -9,10 +8,12 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useNavigate } from "react-router-dom";
+
+const ReactQuill = lazy(() => import("react-quill"));
 
 export default function CreatePost() {
   const [file, setFile] = useState(null);
@@ -20,6 +21,7 @@ export default function CreatePost() {
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
+  const [quillReady, setQuillReady] = useState(false);
 
   const navigate = useNavigate();
 
@@ -30,6 +32,7 @@ export default function CreatePost() {
         window.Quill = Quill;
         const { ShortNameEmoji } = await import("quill-emoji");
         Quill.register("modules/emoji", ShortNameEmoji);
+        setQuillReady(true);
       } catch (error) {
         console.error("Failed to load Quill modules:", error);
       }
@@ -171,16 +174,22 @@ export default function CreatePost() {
             className="w-full h-72 object-cover"
           />
         )}
-        <ReactQuill
-          theme="snow"
-          placeholder="Write something..."
-          className="h-72 mb-12"
-          required
-          modules={modules}
-          onChange={(value) => {
-            setFormData({ ...formData, content: value });
-          }}
-        />
+        {quillReady ? (
+          <Suspense fallback={<div>Loading editor...</div>}>
+            <ReactQuill
+              theme="snow"
+              placeholder="Write something..."
+              className="h-72 mb-12"
+              required
+              modules={modules}
+              onChange={(value) => {
+                setFormData({ ...formData, content: value });
+              }}
+            />
+          </Suspense>
+        ) : (
+          <div>Loading editor...</div>
+        )}
         <Button type="submit" gradientDuoTone="purpleToPink">
           Publish
         </Button>
