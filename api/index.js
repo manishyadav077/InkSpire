@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: "https://inkspire-eps3.onrender.com",
+    origin: "https://inkspire0.netlify.app/",
     credentials: true,
   })
 );

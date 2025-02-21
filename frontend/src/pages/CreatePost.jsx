@@ -27,6 +27,7 @@ export default function CreatePost() {
     async function loadQuillModules() {
       try {
         const Quill = (await import("quill")).default;
+        window.Quill = Quill;
         const { ShortNameEmoji } = await import("quill-emoji");
         Quill.register("modules/emoji", ShortNameEmoji);
       } catch (error) {
