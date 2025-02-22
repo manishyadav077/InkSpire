@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: "https://ink-spire-puce.vercel.app",
+    origin: "https://ink-spire-theta.vercel.app",
     credentials: true,
   })
 );
