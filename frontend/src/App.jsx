@@ -21,11 +21,12 @@ const App = () => {
       <Header />
 
       <Routes>
-        {/* <Route element={<AuthLayout />}> */}
+        <Route element={<AuthLayout />}>
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
-        {/* </Route> */}
-        <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home />} />
+        </Route>
+
         <Route element={<RootLayout />}>
           <Route path="/about" element={<About />} />
           <Route path="/search" element={<Search />} />
