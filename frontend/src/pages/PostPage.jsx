@@ -17,9 +17,11 @@ export default function PostPage() {
     const fetchPost = async () => {
       try {
         setLoading(true);
-        const url = `${API_BASE_URL}/api/post/getposts?slug=${postSlug}`;
+        const res = await fetch(
+          `${API_BASE_URL}/api/post/getposts?slug=${postSlug}`
+        );
         console.log("Fetching URL:", url);
-        const res = await fetch(url);
+
         const data = await res.json();
 
         console.log("Response:", res);
