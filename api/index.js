@@ -25,12 +25,10 @@ const __dirname = path.resolve();
 
 const app = express();
 
-
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
   next();
 });
-
 
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
@@ -49,6 +47,11 @@ app.use(cookieParser());
 
 app.listen(3000, () => {
   console.log("server is running");
+});
+
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  next();
 });
 
 app.use("/api/user", userRoutes);
