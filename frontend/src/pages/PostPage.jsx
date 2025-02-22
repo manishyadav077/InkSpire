@@ -4,6 +4,8 @@ import { Link, useParams } from "react-router-dom";
 import CommentSection from "../components/CommentSection";
 import PostCard from "../components/PostCard";
 
+import API_BASE_URL from "../../config";
+
 export default function PostPage() {
   const { postSlug } = useParams();
   const [loading, setLoading] = useState(true);
@@ -15,7 +17,7 @@ export default function PostPage() {
     const fetchPost = async () => {
       try {
         setLoading(true);
-        const url = `/api/post/getposts?slug=${postSlug}`;
+        const url = `${API_BASE_URL}/api/post/getposts?slug=${postSlug}`;
         console.log("Fetching URL:", url);
         const res = await fetch(url);
         const data = await res.json();
@@ -44,7 +46,7 @@ export default function PostPage() {
   useEffect(() => {
     try {
       const fetchRecentPosts = async () => {
-        const res = await fetch(`/api/post/getposts?limit=3`);
+        const res = await fetch(`${API_BASE_URL}/api/post/getposts?limit=3`);
 
         const data = await res.json();
 

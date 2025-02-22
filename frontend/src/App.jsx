@@ -24,10 +24,10 @@ const App = () => {
         <Route element={<AuthLayout />}>
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/" element={<Home />} />
         </Route>
 
         <Route element={<RootLayout />}>
+          <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/search" element={<Search />} />
           <Route path="/post/:postSlug" element={<PostPage />} />

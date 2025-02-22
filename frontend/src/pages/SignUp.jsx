@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import OAuth from "../components/OAuth";
 import { useDispatch } from "react-redux";
 import { signInStart, signInSuccess } from "../redux/user/userSlice";
+import API_BASE_URL from "../../config";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({});
@@ -23,7 +24,7 @@ const SignUp = () => {
     }
     try {
       dispatch(signInStart());
-      const res = await fetch("/api/auth/signup", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
