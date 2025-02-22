@@ -13,6 +13,14 @@ export default function PostPage() {
   const [post, setPost] = useState(null);
   const [recentPosts, setRecentPosts] = useState(null);
 
+  console.log("API Base URL:", API_BASE_URL);
+  console.log(
+    "Fetching URL:",
+    `${API_BASE_URL}/api/post/getposts?slug=${postSlug}`
+  );
+
+  console.log("Fetching get post:", `${API_BASE_URL}/api/post/getposts?limit=3`)
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
