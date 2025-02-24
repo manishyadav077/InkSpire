@@ -3,7 +3,13 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   server: {
-    proxy: { "/api": { target: "http://localhost:3000", secure: false } },
+    proxy: {
+      "/api": {
+        target: "https://inkspire-production.up.railway.app",
+        secure: false,
+        changeOrigin: true,
+      },
+    },
   },
   build: {
     commonjsOptions: {

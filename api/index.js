@@ -37,7 +37,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: "https://ink-spire-theta.vercel.app",
+    origin: ["https://ink-spire-theta.vercel.app", "http://localhost:5173"],
     credentials: true,
   })
 );
@@ -49,10 +49,6 @@ app.listen(3000, () => {
   console.log("server is running");
 });
 
-app.use((req, res, next) => {
-  console.log(`Incoming request: ${req.method} ${req.url}`);
-  next();
-});
 
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
