@@ -13,12 +13,14 @@ import {
   UpdatePost,
 } from "./pages";
 import { FooterCom, Header, ScrollToTop } from "./components";
+import ToastNotifier from "./components/ToastNotifier";
 
 const App = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
       <Header />
+      <ToastNotifier/>
 
       <Routes>
         <Route element={<AuthLayout />}>

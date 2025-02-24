@@ -5,6 +5,7 @@ import OAuth from "../components/OAuth";
 import { useDispatch } from "react-redux";
 import { signInStart, signInSuccess } from "../redux/user/userSlice";
 import API_BASE_URL from "../../config";
+import { showToast } from "../redux/toast/toastSlice";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({});
@@ -29,15 +30,25 @@ const SignUp = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      console.log(res);
 
       const data = await res.json();
-      console.log(data);
+
       if (data.success === false) {
-        return setErrorMessage(data.message);
+        dispatch(
+          showToast({
+            message: "Please enter valid credentials",
+            type: "error",
+          })
+        );
       }
       setLoading(false);
       if (res.ok) {
+        dispatch(
+          showToast({
+            message: "User registered successfully!",
+            type: "success",
+          })
+        );
         dispatch(signInSuccess(data));
         navigate("/");
       }

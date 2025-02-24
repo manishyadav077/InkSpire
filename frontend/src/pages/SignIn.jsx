@@ -7,8 +7,9 @@ import {
   signInStart,
   signInSuccess,
 } from "../redux/user/userSlice";
-import OAuth from "../components/OAuth";
+// import OAuth from "../components/OAuth";
 import API_BASE_URL from "../../config";
+import { showToast } from "../redux/toast/toastSlice";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
@@ -31,16 +32,28 @@ const SignIn = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-        credentials: "include"
+        credentials: "include",
       });
 
       const data = await res.json();
-      console.log(data);
+
       if (data.success === false) {
         dispatch(signInFaliure(data.message));
+        dispatch(
+          showToast({
+            message: "Please enter valid credentials",
+            type: "error",
+          })
+        );
       }
 
       if (res.ok) {
+        dispatch(
+          showToast({
+            message: "User signined in successfully!",
+            type: "success",
+          })
+        );
         dispatch(signInSuccess(data));
         navigate("/");
       }
@@ -122,12 +135,6 @@ const SignIn = () => {
               Sign Up
             </Link>
           </div>
-
-          {errorMessage && (
-            <Alert className="mt-2" color="failure">
-              {errorMessage}
-            </Alert>
-          )}
         </div>
       </div>
     </div>
