@@ -40,6 +40,8 @@ export const signup = async (req, res, next) => {
       .status(201)
       .cookie("access_token", token, {
         httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "None",
       })
       .json({ ...rest, isAdmin: true });
   } catch (error) {
@@ -76,6 +78,8 @@ export const signin = async (req, res, next) => {
       .status(200)
       .cookie("access_token", token, {
         httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "None",
       })
       .json(rest);
     res.json("signin successful");
