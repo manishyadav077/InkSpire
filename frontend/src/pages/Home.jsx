@@ -1,18 +1,21 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
+import API_BASE_URL from "../../config";
+import { Spinner } from "flowbite-react";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await fetch("/api/post/getPosts");
+      const res = await fetch(`${API_BASE_URL}/api/post/getPosts`);
       const data = await res.json();
       setPosts(data.posts);
     };
     fetchPosts();
   }, []);
+
   return (
     <div>
       <div className="flex flex-col gap-6 p-5 px-3 max-w-6xl mx-auto ">
