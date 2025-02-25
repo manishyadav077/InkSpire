@@ -37,7 +37,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: ["https://ink-spire-theta.vercel.app", "http://localhost:5173"],
+    origin: ["https://ink-spire-theta.vercel.app"],
     credentials: true,
   })
 );
