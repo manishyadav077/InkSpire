@@ -25,6 +25,15 @@ const __dirname = path.resolve();
 
 const app = express();
 
+if (process.env.NODE_ENV !== "production") {
+  app.use(
+    cors({
+      origin: process.env.CLIENT_URL_LOCAL,
+      credentials: true,
+    })
+  );
+}
+
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
   next();
@@ -35,20 +44,12 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(
-  cors({
-    origin: ["https://ink-spire-theta.vercel.app"],
-    credentials: true,
-  })
-);
-
 app.use(express.json());
 app.use(cookieParser());
 
 app.listen(3000, () => {
   console.log("server is running");
 });
-
 
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
