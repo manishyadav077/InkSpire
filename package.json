@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon api/index.js",
+    "start": "node api/index.js",
     "dev": "node api/index.js",
     "postinstall": "npm install --prefix frontend",
     "build": "npx run build --prefix frontend"
