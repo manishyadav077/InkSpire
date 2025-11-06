@@ -8,7 +8,7 @@
     "start": "nodemon api/index.js",
     "dev": "node api/index.js",
     "postinstall": "npm install --prefix frontend",
-    "build": "npm run build --prefix frontend"
+    "build": "npx run build --prefix frontend"
   },
   "author": "",
   "license": "ISC",
