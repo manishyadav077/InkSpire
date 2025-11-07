@@ -35,12 +35,8 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 app.use((req, res, next) => {
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-  next();
-});
-
-app.use((req, res, next) => {
-  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+  res.setHeader("Cross-Origin-Embedder-Policy", "credentialless");
   next();
 });
 
