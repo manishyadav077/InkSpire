@@ -1,6 +1,6 @@
-import { Alert, Button, Modal, TextInput } from "flowbite-react";
+import { Alert, Modal, TextInput } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   getDownloadURL,
   getStorage,
@@ -19,10 +19,9 @@ import {
   deleteUserFailure,
   signoutSuccess,
 } from "../redux/user/userSlice";
-import { useDispatch } from "react-redux";
-import { HiOutlineExclamationCircle } from "react-icons/hi";
-import API_BASE_URL from "../../config";
 import { showToast } from "../redux/toast/toastSlice";
+import API_BASE_URL from "../../config";
+import { User, Mail, Lock, Trash2, LogOut, Camera, Save, AlertCircle } from "lucide-react";
 
 export default function DashProfile() {
   const { currentUser, error, loading } = useSelector((state) => state.user);
@@ -31,11 +30,8 @@ export default function DashProfile() {
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
   const [imageFileUploading, setImageFileUploading] = useState(false);
-  const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
-  const [updateUserError, setUpdateUserError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
-
   const filePickerRef = useRef();
   const dispatch = useDispatch();
 
@@ -46,10 +42,9 @@ export default function DashProfile() {
       setImageFileUrl(URL.createObjectURL(file));
     }
   };
+
   useEffect(() => {
-    if (imageFile) {
-      uploadImage();
-    }
+    if (imageFile) uploadImage();
   }, [imageFile]);
 
   const uploadImage = async () => {
@@ -62,15 +57,11 @@ export default function DashProfile() {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setImageFileUploadProgress(progress.toFixed(0));
       },
       (error) => {
-        setImageFileUploadError(
-          "Could not upload image (File must be less than 5MB)"
-        );
+        setImageFileUploadError("Could not upload image (File must be less than 5MB)");
         setImageFileUploadProgress(null);
         setImageFile(null);
         setImageFileUrl(null);
@@ -92,62 +83,37 @@ export default function DashProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (Object.keys(formData).length === 0) {
-      setUpdateUserError("No changes made");
-      return;
-    }
-    if (imageFileUploading) {
-      setUpdateUserError("Please wait for image to upload");
-      return;
-    }
+    if (Object.keys(formData).length === 0) return;
+    if (imageFileUploading) return;
     try {
       dispatch(updateStart());
-      const res = await fetch(
-        `${API_BASE_URL}/api/user/update/${currentUser._id}`,
-        {
-          method: "PUT",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-
+      const res = await fetch(`${API_BASE_URL}/api/user/update/${currentUser._id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
       const data = await res.json();
       if (!res.ok) {
         dispatch(updateFailure(data.message));
-        dispatch(
-          showToast({
-            message: "Please try again",
-            type: "error",
-          })
-        );
+        dispatch(showToast({ message: "Update failed. Please try again.", type: "error" }));
       } else {
         dispatch(updateSuccess(data));
-        dispatch(
-          showToast({
-            message: "Profile updated successfully",
-            type: "success",
-          })
-        );
+        dispatch(showToast({ message: "Profile updated successfully!", type: "success" }));
       }
     } catch (error) {
       dispatch(updateFailure(error.message));
     }
   };
+
   const handleDeleteUser = async () => {
     setShowModal(false);
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(
-        `${API_BASE_URL}/api/user/delete/${currentUser._id}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        }
-      );
+      const res = await fetch(`${API_BASE_URL}/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
       const data = await res.json();
       if (!res.ok) {
         dispatch(deleteUserFailure(data.message));
@@ -165,123 +131,133 @@ export default function DashProfile() {
         method: "POST",
         credentials: "include",
       });
-      const data = await res.json();
-      if (!res.ok) {
-        console.log(data.message);
-      } else {
-        dispatch(signoutSuccess());
-      }
+      if (res.ok) dispatch(signoutSuccess());
     } catch (error) {
       console.log(error.message);
     }
   };
+
   return (
-    <div className="max-w-lg mx-auto p-3 w-full">
-      <h1 className="my-7 text-center font-semibold text-3xl">Profile</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          ref={filePickerRef}
-          hidden
-        />
-        <div
-          className="relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full"
-          onClick={() => filePickerRef.current.click()}
-        >
-          {imageFileUploadProgress && (
-            <CircularProgressbar
-              value={imageFileUploadProgress || 0}
-              text={`${imageFileUploadProgress}%`}
-              strokeWidth={5}
-              styles={{
-                root: {
-                  width: "100%",
-                  height: "100%",
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                },
-                path: {
-                  stroke: `rgba(62, 152, 199, ${
-                    imageFileUploadProgress / 100
-                  })`,
-                },
-              }}
-            />
-          )}
-          <img
-            src={imageFileUrl || currentUser.profilePicture}
-            alt="user"
-            className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
-              imageFileUploadProgress &&
-              imageFileUploadProgress < 100 &&
-              "opacity-60"
-            }`}
-          />
-        </div>
-        {imageFileUploadError && (
-          <Alert color="failure">{imageFileUploadError}</Alert>
-        )}
-        <TextInput
-          type="text"
-          id="username"
-          placeholder="username"
-          defaultValue={currentUser.username}
-          onChange={handleChange}
-        />
-        <TextInput
-          type="email"
-          id="email"
-          placeholder="email"
-          defaultValue={currentUser.email}
-          onChange={handleChange}
-        />
-        <TextInput
-          type="password"
-          id="password"
-          placeholder="password"
-          onChange={handleChange}
-        />
-        <Button
-          type="submit"
-          gradientDuoTone="purpleToBlue"
-          outline
-          disabled={loading || imageFileUploading}
-        >
-          {loading ? "Loading..." : "Update"}
-        </Button>
-      </form>
-      <div className="text-red-500 flex justify-between mt-5">
-        <span onClick={() => setShowModal(true)} className="cursor-pointer">
-          Delete Account
-        </span>
-        <span onClick={handleSignout} className="cursor-pointer">
-          Sign Out
-        </span>
+    <div className="max-w-xl mx-auto p-6 w-full min-h-screen">
+      <div className="mb-12">
+        <h1 className="text-4xl font-outfit font-extrabold tracking-tight">Account Settings</h1>
+        <p className="text-slate-500 mt-1">Manage your public profile and privacy</p>
       </div>
 
-      <Modal
-        show={showModal}
-        onClose={() => setShowModal(false)}
-        popup
-        size="md"
-      >
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <input type="file" accept="image/*" onChange={handleImageChange} ref={filePickerRef} hidden />
+
+        <div className="flex flex-col items-center group">
+          <div
+            className="relative w-32 h-32 cursor-pointer transition-transform hover:scale-105"
+            onClick={() => filePickerRef.current.click()}
+          >
+            <div className="absolute inset-0 rounded-full border-4 border-slate-100 dark:border-slate-800" />
+            {imageFileUploadProgress && (
+              <div className="absolute inset-0 z-10">
+                <CircularProgressbar
+                  value={imageFileUploadProgress || 0}
+                  strokeWidth={4}
+                  styles={{
+                    path: { stroke: '#3b82f6', strokeLinecap: 'round' },
+                    trail: { stroke: 'transparent' }
+                  }}
+                />
+              </div>
+            )}
+            <img
+              src={imageFileUrl || currentUser.profilePicture}
+              alt="user"
+              className={`rounded-full w-full h-full object-cover p-1 ${imageFileUploadProgress && imageFileUploadProgress < 100 && "opacity-60"}`}
+            />
+            <div className="absolute bottom-0 right-0 p-2 bg-primary-500 text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+              <Camera size={16} />
+            </div>
+          </div>
+          {imageFileUploadError && <Alert color="failure" className="mt-4 rounded-xl">{imageFileUploadError}</Alert>}
+        </div>
+
+        <div className="glass-card rounded-3xl p-8 space-y-6">
+          <div className="space-y-4">
+            <div className="relative group">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary-500 transition-colors">
+                <User size={20} />
+              </div>
+              <TextInput
+                type="text"
+                id="username"
+                placeholder="Username"
+                defaultValue={currentUser.username}
+                onChange={handleChange}
+                theme={{ field: { input: { base: "block w-full border disabled:cursor-not-allowed disabled:opacity-50 !bg-slate-50 dark:!bg-slate-900 border-transparent !rounded-2xl focus:!ring-2 focus:!ring-primary-400 py-4 pl-12 pr-6 font-semibold transition-all" } } }}
+              />
+            </div>
+
+            <div className="relative group">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary-500 transition-colors">
+                <Mail size={20} />
+              </div>
+              <TextInput
+                type="email"
+                id="email"
+                placeholder="Email Address"
+                defaultValue={currentUser.email}
+                onChange={handleChange}
+                theme={{ field: { input: { base: "block w-full border disabled:cursor-not-allowed disabled:opacity-50 !bg-slate-50 dark:!bg-slate-900 border-transparent !rounded-2xl focus:!ring-2 focus:!ring-primary-400 py-4 pl-12 pr-6 font-semibold transition-all" } } }}
+              />
+            </div>
+
+            <div className="relative group">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary-500 transition-colors">
+                <Lock size={20} />
+              </div>
+              <TextInput
+                type="password"
+                id="password"
+                placeholder="New Password"
+                onChange={handleChange}
+                theme={{ field: { input: { base: "block w-full border disabled:cursor-not-allowed disabled:opacity-50 !bg-slate-50 dark:!bg-slate-900 border-transparent !rounded-2xl focus:!ring-2 focus:!ring-primary-400 py-4 pl-12 pr-6 font-semibold transition-all" } } }}
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading || imageFileUploading}
+            className="premium-button primary-gradient text-white w-full flex items-center justify-center gap-2 py-4 text-lg shadow-xl shadow-primary-500/30 disabled:opacity-50"
+          >
+            {loading ? "Saving Changes..." : <><Save size={20} /> Save Profile</>}
+          </button>
+        </div>
+      </form>
+
+      <div className="grid grid-cols-2 gap-4 mt-8">
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-red-50 dark:bg-red-950/20 text-red-500 font-bold text-sm hover:bg-red-500 hover:text-white transition-all"
+        >
+          <Trash2 size={18} /> Delete Account
+        </button>
+        <button
+          onClick={handleSignout}
+          className="flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+        >
+          <LogOut size={18} /> Sign Out
+        </button>
+      </div>
+
+      <Modal show={showModal} onClose={() => setShowModal(false)} popup size="md" theme={{ content: { inner: "rounded-3xl bg-white dark:bg-dark-card" } }}>
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
-            <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
-            <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">
-              Are you sure you want to delete your account?
-            </h3>
-            <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={handleDeleteUser}>
-                Yes, I'm sure
-              </Button>
-              <Button color="gray" onClick={() => setShowModal(false)}>
-                No, cancel
-              </Button>
+            <div className="p-4 bg-red-100 dark:bg-red-900/20 text-red-500 w-fit mx-auto rounded-full mb-4">
+              <AlertCircle size={32} />
+            </div>
+            <h3 className="mb-4 text-xl font-outfit font-bold text-slate-900 dark:text-white">Close Account?</h3>
+            <p className="text-slate-500 mb-8 text-sm">Deleting your account is permanent and cannot be reversed. All your data will be cleared.</p>
+            <div className="flex justify-center gap-3">
+              <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2.5 px-8 rounded-xl transition-all" onClick={handleDeleteUser}>Delete Account</button>
+              <button className="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-600 dark:text-slate-300 font-bold py-2.5 px-8 rounded-xl transition-all" onClick={() => setShowModal(false)}>Keep it</button>
             </div>
           </div>
         </Modal.Body>
