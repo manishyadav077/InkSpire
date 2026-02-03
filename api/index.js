@@ -26,12 +26,21 @@ mongoose
   });
 
 const app = express();
+app.set("trust proxy", 1);
 
 if (process.env.NODE_ENV !== "production") {
   app.use(
     cors({
       origin: process.env.CLIENT_URL_LOCAL,
       credentials: true,
+    })
+  );
+} else {
+  app.use(
+    cors({
+      origin: process.env.CLIENT_URL_PRODUCTION, // Assuming a production client URL env variable
+      credentials: true,
+      optionsSuccessStatus: 200,
     })
   );
 }

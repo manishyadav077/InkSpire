@@ -41,7 +41,7 @@ export const signup = async (req, res, next) => {
       .cookie("access_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+        sameSite: "Lax",
       })
       .json({ ...rest, isAdmin: true });
   } catch (error) {
@@ -79,7 +79,7 @@ export const signin = async (req, res, next) => {
       .cookie("access_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+        sameSite: "Lax",
       })
       .json(rest);
   } catch (error) {
@@ -103,7 +103,7 @@ export const google = async (req, res, next) => {
         .cookie("access_token", token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
-          sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+          sameSite: "Lax",
         })
         .json(rest);
     } else {
@@ -130,7 +130,7 @@ export const google = async (req, res, next) => {
         .cookie("access_token", token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
-          sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+          sameSite: "Lax",
         })
         .json(rest);
     }
