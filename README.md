@@ -12,4 +12,4 @@
 - 🔄 **RESTful API** — Well-structured REST API backend built with Express.js handling all client-server communication.
 - 🗄️ **Database Integration** — Persistent storage for users, posts, and comments.
 
-<p align="center">Made with ❤️ by Manish Yadav</p>
+
